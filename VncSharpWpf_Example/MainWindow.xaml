@@ -1,0 +1,48 @@
+﻿<Window x:Class="VncSharpWpf_Example.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:rdp="clr-namespace:VncSharpWpf;assembly=VncSharpWpf"
+        xmlns:local="clr-namespace:VncSharpWpf_Example"
+        Icon="vncviewer.ico"
+        Title="MainWindow" Height="350" Width="525">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top" Height="20">
+            <MenuItem Header="File" Name="File">
+                <MenuItem.Resources>
+                    <ObjectDataProvider x:Key="localAddr" ObjectType="{x:Type local:LocalAddressService}" MethodName="GetLocalIpAddress" />
+                    <DataTemplate x:Key="MenuItems" DataType="IPAddress">
+                        <MenuItem Header="{Binding Path=.}" Click="MenuItem_Listen_Click"/>
+                    </DataTemplate>
+                </MenuItem.Resources>
+                <MenuItem Header="Connect" Click="MenuItem_Connect_Click" Name="MenuItem_Connect" />
+                <MenuItem Header="Disconnect" Click="MenuItem_DisConnect_Click" Name="MenuItem_DisConnect" IsEnabled="False" />
+                <Separator />
+                <MenuItem Header="Listen" Name="MenuItem_Listen" ItemsSource="{Binding Source={StaticResource localAddr}}" ItemTemplate="{DynamicResource MenuItems}" />
+                <MenuItem Header="Stop Listen" Click="MenuItem_StopListen_Click" Name="MenuItem_StopListen" IsEnabled="False" />
+                <Separator />
+                <MenuItem Header="Quit" Click="MenuItem_Quit_Click" Name="MenuItem_Quit" />
+            </MenuItem>
+            <MenuItem Header="Edit">
+                <MenuItem Header="Send Keys" Name="MenuItem_SendKeys" IsEnabled="False">
+                    <MenuItem Header="CTRL + ALT + DEL" Click="MenuItem_CtrlAltDel_Click" Name="MenuItem_CtrlAltDel" />
+                    <MenuItem Header="ALT + F4" Click="MenuItem_AltF4_Click" Name="MenuItem_AltF4" />
+                    <MenuItem Header="CTRL + ESC" Click="MenuItem_CtrlEsc_Click" Name="MenuItem_CtrlEsc" />
+                    <MenuItem Header="CTRL" Click="MenuItem_Ctrl_Click" Name="MenuItem_Ctrl" />
+                    <MenuItem Header="ALT" Click="MenuItem_Ctrl_Click" Name="MenuItem_Alt"/>
+                </MenuItem>
+                <MenuItem Header="Copy local clipboard to host" Click="MenuItem_CopyClipBoard_Click" Name="MenuItem_CopyClipBoard" IsEnabled="False" />
+            </MenuItem>
+            <MenuItem Header="View">
+                <MenuItem Header="Clipped View" Click="MenuItem_ClippedView_Click" Name="MenuItem_ClippedView" IsChecked="True" IsEnabled="False" />
+                <MenuItem Header="Scaled View" Click="MenuItem_ScaledView_Click" Name="MenuItem_ScaledView" />
+                <Separator />
+                <MenuItem Header="Full Screen Refresh" Click="MenuItem_FullScreenRefresh_Click" Name="MenuItem_FullScrennRefresh" IsEnabled="False"></MenuItem>
+                <MenuItem Header="ViewOnly" Click="MenuItem_ViewOnly_Click" Name="MenuItem_ViewOnly" />
+            </MenuItem>
+        </Menu>
+        <Grid>
+            <rdp:RemoteDesktopWpf x:Name="rdp" />
+        </Grid>
+    </DockPanel>
+
+</Window>
